@@ -11,13 +11,17 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         src={Logo}
         alt="Bookstore catalog logo"
         width={70}
-        height={10}
+        // height={10}
         quality={100}
         // placeholder="blur"
       />
-      <h1>Bookstore Catalog</h1>
-      <Link href="/">Dashboard</Link>
-      <Link href="/genres">Genres</Link>
+      <div className="flex align-center divide-x-2 gap-2">
+        <h1>Super-Mario Bookstore Catalog</h1>
+        <div className="flex gap-6 pt-1 ml-4 pl-3">
+          <Link href="/">Dashboard</Link>
+          <Link href="/books">Books Catalog</Link>
+        </div>
+      </div>
     </nav>
   );
 };

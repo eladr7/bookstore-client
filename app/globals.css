@@ -59,7 +59,7 @@ button:hover {
 }
 
 /* form styles */
-/* form {
+form {
   @apply py-4 px-7 
     bg-primary 
     bg-opacity-5 
@@ -67,11 +67,11 @@ button:hover {
     block 
     mx-auto 
     min-w-fit w-1/4;
-} */
+}
 form label {
   @apply block;
 }
-/* form input,
+form input,
 form textarea,
 form select {
   @apply block 
@@ -80,7 +80,7 @@ form select {
 }
 form button {
   @apply block mx-auto;
-} */
+}
 
 /* feedback styles */
 .error {
