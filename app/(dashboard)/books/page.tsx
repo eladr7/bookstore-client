@@ -1,26 +1,9 @@
-import { Suspense } from "react";
-
+import { formatCamelCaseString, getGenresFromAPI } from "@/app/helpers";
 import Link from "next/link";
-import {
-  Book,
-  ServerSideComponentProp,
-  formatCamelCaseString,
-} from "@/app/definitions";
-import { notFound } from "next/navigation";
-
-const getGenres = async () => {
-  const res = await fetch("http://localhost:5000/genres", {
-    next: {
-      revalidate: 0,
-    },
-  });
-
-  return res.json();
-};
 
 interface BooksCatalogProps {}
 const BooksCatalog: React.FC<BooksCatalogProps> = async ({}) => {
-  const genres = await getGenres();
+  const genres = await getGenresFromAPI();
 
   return (
     <main>

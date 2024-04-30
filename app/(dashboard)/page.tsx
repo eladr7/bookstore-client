@@ -11,7 +11,7 @@ export default async function Home() {
       </div>
 
       <div className="card">
-        <h3>Our moto</h3>
+        <h2>Our moto</h2>
 
         <div>
           <p>

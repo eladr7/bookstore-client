@@ -24,7 +24,7 @@ export const BooksList: React.FC<BooksListProps> = async ({ genre }) => {
     <>
       {books.map((book: Book) => (
         <div key={book.id} className="card my-5">
-          <Link href={`/books/${book.id}`}>
+          <Link href={`/books/${book.genre}/${book.id}`}>
             <h3>{book.title}</h3>
             <div className="flex justify-between">
               <p>Written by {book.authorName}, </p>

@@ -20,6 +20,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         <div className="flex gap-6 pt-1 ml-4 pl-3">
           <Link href="/">Dashboard</Link>
           <Link href="/books">Books Catalog</Link>
+          <Link href="/books/create">Create Book</Link>
         </div>
       </div>
     </nav>
