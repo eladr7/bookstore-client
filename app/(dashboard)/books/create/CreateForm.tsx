@@ -91,7 +91,7 @@ const CreateForm: React.FC<CreateFromProps> = ({ genres }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-1/2">
+    <form onSubmit={handleSubmit} className="create-form w-1/2">
       {Object.entries(FormInputFieldsMap).map(
         ([k, v]: [string, FormInputRole], i: number) => (
           <label key={k}>

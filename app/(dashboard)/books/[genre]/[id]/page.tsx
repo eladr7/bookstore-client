@@ -1,8 +1,10 @@
 export const dynamicParams = false;
 
+import { BookDetails } from "@/app/components/BookDetails";
 import { ServerSideComponentProp } from "@/app/definitions";
 
 import { Book } from "@/app/definitions";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 export async function generateStaticParams() {
@@ -14,7 +16,7 @@ export async function generateStaticParams() {
 }
 
 const getBook = async (genre: string, id: string) => {
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  // await new Promise((resolve) => setTimeout(resolve, 2000));
 
   const res = await fetch(`http://localhost:5000/books/${genre}/${id}`, {
     next: {
@@ -29,23 +31,31 @@ const getBook = async (genre: string, id: string) => {
   return res.json();
 };
 
-const BookDetails: React.FC<
+const BookCard: React.FC<
   ServerSideComponentProp<{ id: string; genre: string }>
 > = async ({ params }) => {
   const book: Book = await getBook(params.genre, params.id);
   return (
     <main>
       <nav>
-        <h2>Book details</h2>
+        <div className="heading-divider">
+          <h1>Book details [Genre: {book.genre}]</h1>
+          <Link href={`/books/${book.genre}`} className="pt-2">
+            <h3>
+              Back to the{" "}
+              <b>
+                {" "}
+                <big>{book.genre}</big>
+              </b>{" "}
+              catalog
+            </h3>
+          </Link>
+        </div>
       </nav>
 
-      <div className="card">
-        <h3>{book.title}</h3>
-        {/* <small>Created by {book.user_email}</small>
-        <p>{book.body}</p> */}
-      </div>
+      <BookDetails book={book} />
     </main>
   );
 };
 
-export default BookDetails;
+export default BookCard;

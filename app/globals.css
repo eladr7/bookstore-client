@@ -59,26 +59,26 @@ button:hover {
 }
 
 /* form styles */
-form {
+.create-form {
   @apply py-4 px-7 
     bg-primary 
     bg-opacity-5 
     rounded-md 
     block 
     mx-auto 
-    min-w-fit w-1/4;
+    min-w-fit;
 }
-form label {
+.create-form label {
   @apply block;
 }
-form input,
-form textarea,
-form select {
+.create-form input,
+.create-form textarea,
+.create-form select {
   @apply block 
     mt-2 my-4 px-2 py-1 
     rounded-sm w-full;
 }
-form button {
+.create-form button {
   @apply block mx-auto;
 }
 
@@ -93,6 +93,14 @@ form button {
     block
     max-w-fit
     my-4 mx-auto;
+}
+
+.heading-divider {
+  @apply flex 
+  flex-col 
+  justify-start 
+  gap-2 
+  divide-y-2;
 }
 
 /* card styles */

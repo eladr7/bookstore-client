@@ -1,3 +1,5 @@
+export const dynamicParams = false;
+
 import { Suspense } from "react";
 import { BooksList } from "./BooksList";
 import Loading from "../../loading";
@@ -18,9 +20,9 @@ const Genres: React.FC<ServerSideComponentProp<{ genre: string }>> = async ({
   return (
     <main>
       <nav>
-        <div className="flex flex-col justify-staret gap-2">
-          <h2>Genres</h2>
-          <Link href="/books">
+        <div className="heading-divider">
+          <h1>{params.genre}</h1>
+          <Link href="/books" className="pt-2">
             <h3>Back to the books catalog</h3>
           </Link>
         </div>

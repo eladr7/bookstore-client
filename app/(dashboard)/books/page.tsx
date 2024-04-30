@@ -11,7 +11,7 @@ const BooksCatalog: React.FC<BooksCatalogProps> = async ({}) => {
         <div className="flex flex-col gap-2">
           <h2>Genres</h2>
           <div
-            className="flex justify-center gap-2 divide-y-2 space-y-2"
+            className="heading-divider space-y-2"
             style={{
               display: "inline-grid",
               grid: "auto-flow / repeat(auto-fill, minmax(7rem, 1fr))",

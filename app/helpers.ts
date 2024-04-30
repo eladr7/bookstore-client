@@ -18,3 +18,18 @@ export const getGenresFromAPI = async () => {
 
   return res.json();
 };
+
+export const toNormalDate = (dateString: string) => {
+  // dateString example: "2024-04-02T00:00:00.000Z";
+  const dateObject = new Date(dateString);
+
+  // Format the date as desired
+  const formattedDate = dateObject.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+  });
+
+  // Output: Apr 2, 2024
+  return formattedDate;
+};
