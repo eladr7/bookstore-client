@@ -1,5 +1,5 @@
 import { BookDetails } from "@/app/components/BookDetails";
-import { Book } from "@/app/definitions";
+import { Book } from "@/app/lib/definitions";
 
 const getBooks = async (genre: string) => {
   // await new Promise((resolve) => setTimeout(resolve, 2000));

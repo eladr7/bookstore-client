@@ -1,9 +1,7 @@
 export const dynamicParams = false;
 
 import { BookDetails } from "@/app/components/BookDetails";
-import { ServerSideComponentProp } from "@/app/definitions";
-
-import { Book } from "@/app/definitions";
+import { Book, ServerSideComponentProp } from "@/app/lib/definitions";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 

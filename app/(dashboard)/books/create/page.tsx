@@ -1,4 +1,4 @@
-import { getGenresFromAPI } from "@/app/helpers";
+import { getGenresFromAPI } from "@/app/lib/helpers";
 import CreateForm from "./CreateForm";
 
 interface CreatePageProps {}

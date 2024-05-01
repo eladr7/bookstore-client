@@ -1,4 +1,4 @@
-import { formatCamelCaseString, getGenresFromAPI } from "@/app/helpers";
+import { formatCamelCaseString, getGenresFromAPI } from "@/app/lib/helpers";
 import Link from "next/link";
 
 interface BooksCatalogProps {}

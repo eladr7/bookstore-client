@@ -1,7 +1,7 @@
 "use client";
 
 import React, { FormEvent, useState } from "react";
-import { Book } from "../definitions";
+import { Book } from "../lib/definitions";
 import { useRouter } from "next/navigation";
 
 interface BookRemoveHandlerProps {

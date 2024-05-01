@@ -1,6 +1,6 @@
 import React from "react";
-import { Book } from "../definitions";
-import { toNormalDate } from "../helpers";
+import { Book } from "../lib/definitions";
+import { toNormalDate } from "../lib/helpers";
 import { BookRemoveHandler } from "./BookRemoveHandler";
 import Link from "next/link";
 
