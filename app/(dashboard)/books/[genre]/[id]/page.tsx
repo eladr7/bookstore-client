@@ -1,5 +1,3 @@
-export const dynamicParams = false;
-
 import { BookDetails } from "@/app/components/BookDetails";
 import { Book, ServerSideComponentProp } from "@/app/lib/definitions";
 import Link from "next/link";

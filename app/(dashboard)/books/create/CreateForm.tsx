@@ -1,6 +1,6 @@
 "use client";
 
-import { Book } from "@/app/definitions";
+import { Book } from "@/app/lib/definitions";
 import { formatCamelCaseString } from "@/app/lib/helpers";
 import { useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useRef, useState } from "react";
