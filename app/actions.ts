@@ -55,7 +55,7 @@ export async function createBook(
     price: formData.get(NewBookFields.price),
     genre: formData.get(NewBookFields.genre),
   });
-  // debugger;
+
   if (!parse.success) {
     const validationError = fromZodError(parse.error).toString();
     console.log(validationError);
@@ -78,30 +78,40 @@ export async function createBook(
   }
 }
 
-// export async function deleteBook(
-//   prevState: {
-//     message: string;
-//   },
-//   formData: FormData
-// ) {
-//   const schema = z.object({
-//     id: z.string().min(1),
-//     Book: z.string().min(1),
-//   });
-//   const data = schema.parse({
-//     id: formData.get("id"),
-//     Book: formData.get("Book"),
-//   });
+export async function deleteBook(
+  prevState: {
+    message: string;
+  },
+  formData: FormData
+) {
+  const schema = z.object({
+    id: z.string().min(1),
+    genre: z.string().min(1),
+  });
+  const data = schema.parse({
+    id: formData.get("id"),
+    genre: formData.get("genre"),
+  });
+  debugger;
+  try {
+    const response = await fetch(
+      `http://localhost:5000/books/${data.genre}/${data.id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-//   try {
-//     await sql`
-//       DELETE FROM Books
-//       WHERE id = ${data.id};
-//     `;
+    if (!response.ok) {
+      throw new Error("Failed to remove book");
+    }
 
-//     revalidatePath("/");
-//     return { message: `Deleted Book ${data.Book}` };
-//   } catch (e) {
-//     return { message: "Failed to delete Book" };
-//   }
-// }
+    revalidatePath(`/books/${data.genre}`);
+    console.log("Book removed successfully");
+    return { message: "Deleted successfully" };
+  } catch (e) {
+    return { message: "Failed to delete Book" };
+  }
+}

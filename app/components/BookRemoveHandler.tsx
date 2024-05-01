@@ -1,9 +1,24 @@
 "use client";
 
-import React, { FormEvent, useState } from "react";
+import React from "react";
 import { Book } from "../lib/definitions";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
+import { FormSubmitButton } from "./FormSubmitButton";
+import { useFormState, useFormStatus } from "react-dom";
+import { deleteBook } from "../actions";
 
+const initialState = {
+  message: "",
+};
+// function DeleteButton() {
+//   const { pending } = useFormStatus();
+
+//   return (
+//     <button type="submit" aria-disabled={pending}>
+//       Delete
+//     </button>
+//   );
+// }
 interface BookRemoveHandlerProps {
   book: Book;
 }
@@ -11,99 +26,20 @@ interface BookRemoveHandlerProps {
 export const BookRemoveHandler: React.FC<BookRemoveHandlerProps> = ({
   book,
 }) => {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  // const router = useRouter();
+  const [state, formAction] = useFormState(deleteBook, initialState);
 
-  const handleRemove2 = async (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    e.preventDefault();
-    setIsLoading(true);
-    if (typeof window !== "undefined") {
-      const confirmDelete = window.confirm(
-        "Are you sure you want to remove this book?"
-      );
-
-      if (!confirmDelete) {
-        return;
-      }
-    }
-
-    try {
-      const response = await fetch(
-        `http://localhost:5000/books/${book.genre}/${book.id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to remove book");
-      }
-
-      // Handle successful removal, such as navigating to a different page
-      console.log("Book removed successfully");
-
-      if (response.status === 201) {
-        router.refresh();
-        router.push(`/books/${book.genre}`);
-      }
-    } catch (error: any) {
-      console.error("Error removing book:", error.message);
-    }
-  };
-
-  const handleRemove = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsLoading(true);
-    if (typeof window !== "undefined") {
-      const confirmDelete = window.confirm(
-        "Are you sure you want to remove this book?"
-      );
-
-      if (!confirmDelete) {
-        return;
-      }
-    }
-
-    try {
-      const response = await fetch(
-        `http://localhost:5000/books/${book.genre}/${book.id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to remove book");
-      }
-
-      // Handle successful removal, such as navigating to a different page
-      console.log("Book removed successfully");
-
-      if (response.status === 201) {
-        router.refresh();
-        router.push(`/books/${book.genre}`);
-      }
-    } catch (error: any) {
-      console.error("Error removing book:", error.message);
-    }
-  };
   return (
-    <form onSubmit={handleRemove}>
-      <button
-        className="btn-primary pill"
-        disabled={isLoading}
-        onClick={handleRemove2}
-      >
-        Remove
-      </button>
+    <form action={formAction}>
+      <input type="hidden" name="id" value={book.id} />
+      <input type="hidden" name="genre" value={book.genre} />
+      {/* <DeleteButton /> */}
+      <div className="pill">
+        <FormSubmitButton txt="Remove" />
+      </div>
+      <p aria-live="polite" className="sr-only" role="status">
+        {state?.message}
+      </p>
     </form>
   );
 };
