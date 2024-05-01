@@ -12,7 +12,7 @@ export const formatCamelCaseString = (text: string): string => {
 export const getGenresFromAPI = async () => {
   const res = await fetch("http://localhost:5000/genres", {
     next: {
-      revalidate: 3600,
+      revalidate: 60 * 60 * 24 * 30,
     },
   });
 
