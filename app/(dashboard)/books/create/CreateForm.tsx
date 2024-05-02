@@ -64,18 +64,9 @@ const CreateForm: React.FC<CreateFromProps> = ({ genres }) => {
           <FormFieldWrapper
             key={k}
             heading={formatCamelCaseString(NewBookFields[k as NewBookFields])}
-            errorMsg={
-              errors[k as keyof CreateBookSchema]
-                ? `${errors[k as keyof CreateBookSchema]?.message}`
-                : null
-            }
+            errorMsg={errors[k as keyof CreateBookSchema]?.message ?? null}
           >
-            <input
-              type={v}
-              {...register(k as keyof CreateBookSchema, {
-                required: `${k} is required`,
-              })}
-            />
+            <input type={v} {...register(k as keyof CreateBookSchema)} />
           </FormFieldWrapper>
         )
       )}
@@ -83,32 +74,21 @@ const CreateForm: React.FC<CreateFromProps> = ({ genres }) => {
       <FormFieldWrapper
         heading={formatCamelCaseString(NewBookFields.description)}
         errorMsg={
-          errors[NewBookFields.description]
-            ? `${errors[NewBookFields.description]?.message}`
-            : null
+          errors[NewBookFields.description as keyof CreateBookSchema]
+            ?.message ?? null
         }
       >
-        <textarea
-          {...register(NewBookFields.description, {
-            required: `${NewBookFields.description} is required`,
-          })}
-        />
+        <textarea {...register(NewBookFields.description)} />
       </FormFieldWrapper>
 
       <FormFieldWrapper
         heading={formatCamelCaseString(NewBookFields.genre)}
         errorMsg={
-          errors[NewBookFields.genre as keyof CreateBookSchema]
-            ? `${
-                errors[NewBookFields.genre as keyof CreateBookSchema]?.message
-              }`
-            : null
+          errors[NewBookFields.genre as keyof CreateBookSchema]?.message ?? null
         }
       >
         <select
-          {...register(NewBookFields.genre as keyof CreateBookSchema, {
-            required: `${NewBookFields.genre} is required`,
-          })}
+          {...register(NewBookFields.genre as keyof CreateBookSchema)}
           onChange={(e) => {
             setGenre(e.target.value);
           }}
@@ -128,4 +108,5 @@ const CreateForm: React.FC<CreateFromProps> = ({ genres }) => {
     </form>
   );
 };
+
 export default CreateForm;
