@@ -122,7 +122,9 @@ const CreateForm: React.FC<CreateFromProps> = ({ genres }) => {
       </FormFieldWrapper>
 
       <FormSubmitButton txt="Add a book" />
-      <p className="text-red-500 mt-4 font-bold">{state?.message}</p>
+      {state?.message && (
+        <p className="text-red-500 mt-4 font-bold">{state?.message}</p>
+      )}
     </form>
   );
 };

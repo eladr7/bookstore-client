@@ -1,5 +1,3 @@
-export const dynamicParams = false;
-
 import { Suspense } from "react";
 import { BooksList } from "./BooksList";
 import Loading from "../../loading";
