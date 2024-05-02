@@ -23,3 +23,6 @@ export interface ServerSideComponentProp<Params, SearchParams = undefined> {
   params: Params;
   searchParams: SearchParams;
 }
+
+export const BookAppendedMsg = "Added Book";
+export const BookRemovedMsg = "Book removed successfully";

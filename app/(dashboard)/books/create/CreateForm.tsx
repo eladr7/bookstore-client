@@ -1,11 +1,19 @@
 "use client";
 
 import { createBook } from "@/app/actions";
+import FormFieldWrapper from "@/app/components/FormFieldWrapper";
 import { FormSubmitButton } from "@/app/components/FormSubmitButton";
-import { NewBookFields } from "@/app/lib/definitions";
-import { formatCamelCaseString } from "@/app/lib/helpers";
-
-import { useFormState } from "react-dom";
+import { BookAppendedMsg, NewBookFields } from "@/app/lib/definitions";
+import {
+  CreateBookSchema,
+  createBookSchema,
+  formatCamelCaseString,
+} from "@/app/lib/helpers";
+import { zodResolver } from "@hookform/resolvers/zod";
+import React, { useRef, useState } from "react";
+import { useFormState, useFormStatus } from "react-dom";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 
 const FormInputFieldsMap = {
   title: "text",
@@ -14,43 +22,105 @@ const FormInputFieldsMap = {
   publicationDate: "date",
 };
 
-const initialState = {
-  message: "",
-};
-
 interface CreateFromProps {
   genres: string[];
 }
+
 const CreateForm: React.FC<CreateFromProps> = ({ genres }) => {
-  const [state, formAction] = useFormState(createBook, initialState);
+  const router = useRouter();
+  const [state, formAction] = useFormState(createBook, {
+    message: "",
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<CreateBookSchema>({ resolver: zodResolver(createBookSchema) });
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const [genre, setGenre] = useState<string>(genres[0] || "");
+
+  if (state.message.includes(BookAppendedMsg)) {
+    router.refresh();
+    router.push(`/books/${genre}`);
+  }
 
   return (
-    <form action={formAction} className="create-form w-1/2">
+    <form
+      action={formAction}
+      onSubmit={(evt) => {
+        evt.preventDefault();
+
+        handleSubmit(() => {
+          formAction(new FormData(formRef.current!));
+        })(evt);
+      }}
+      ref={formRef}
+      className="create-form w-1/2"
+    >
       {Object.entries(FormInputFieldsMap).map(
         ([k, v]: [string, string], i: number) => (
-          <label key={k}>
-            <span>
-              {formatCamelCaseString(NewBookFields[k as NewBookFields])}:
-            </span>
-            <input required type={v} name={k} />
-          </label>
+          <FormFieldWrapper
+            key={k}
+            heading={formatCamelCaseString(NewBookFields[k as NewBookFields])}
+            errorMsg={
+              errors[k as keyof CreateBookSchema]
+                ? `${errors[k as keyof CreateBookSchema]?.message}`
+                : null
+            }
+          >
+            <input
+              type={v}
+              {...register(k as keyof CreateBookSchema, {
+                required: `${k} is required`,
+              })}
+            />
+          </FormFieldWrapper>
         )
       )}
 
-      <label>
-        <span>{formatCamelCaseString(NewBookFields.description)}:</span>
-        <textarea required name={NewBookFields.description} />
-      </label>
-      <label>
-        <span>{formatCamelCaseString(NewBookFields.genre)}:</span>
-        <select required name={NewBookFields.genre}>
+      <FormFieldWrapper
+        heading={formatCamelCaseString(NewBookFields.description)}
+        errorMsg={
+          errors[NewBookFields.description]
+            ? `${errors[NewBookFields.description]?.message}`
+            : null
+        }
+      >
+        <textarea
+          {...register(NewBookFields.description, {
+            required: `${NewBookFields.description} is required`,
+          })}
+        />
+      </FormFieldWrapper>
+
+      <FormFieldWrapper
+        heading={formatCamelCaseString(NewBookFields.genre)}
+        errorMsg={
+          errors[NewBookFields.genre as keyof CreateBookSchema]
+            ? `${
+                errors[NewBookFields.genre as keyof CreateBookSchema]?.message
+              }`
+            : null
+        }
+      >
+        <select
+          {...register(NewBookFields.genre as keyof CreateBookSchema, {
+            required: `${NewBookFields.genre} is required`,
+          })}
+          onChange={(e) => {
+            setGenre(e.target.value);
+          }}
+        >
           {genres.map((genre: string, i: number) => (
             <option value={genre} key={i}>
               {formatCamelCaseString(genre)}
             </option>
           ))}
         </select>
-      </label>
+      </FormFieldWrapper>
+
       <FormSubmitButton txt="Add a book" />
       <p aria-live="polite" className="sr-only" role="status">
         {state?.message}

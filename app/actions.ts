@@ -4,20 +4,8 @@ import { revalidatePath } from "next/cache";
 
 import { z } from "zod";
 import { fromZodError } from "zod-validation-error";
-import { formatCamelCaseString, getGenresFromAPI } from "./lib/helpers";
-import { Book, NewBook, NewBookFields } from "./lib/definitions";
-
-const minCharsErrorMsg = (fieldName: string, minChars: string) => {
-  return `${formatCamelCaseString(
-    fieldName
-  )} must contain at least ${minChars} characters`;
-};
-
-const maxCharsErrorMsg = (fieldName: string, maxChars: string) => {
-  return `${formatCamelCaseString(
-    fieldName
-  )} must contain at most ${maxChars} characters`;
-};
+import { createBookSchema, getGenresFromAPI } from "./lib/helpers";
+import { BookAppendedMsg, BookRemovedMsg } from "./lib/definitions";
 
 export async function createBook(
   prevState: {
@@ -26,34 +14,18 @@ export async function createBook(
   formData: FormData
 ) {
   const genres = await getGenresFromAPI();
+  const schema = createBookSchema.extend({ genre: z.enum(genres) });
 
-  const schema = z.object({
-    title: z
-      .string()
-      .min(3, { message: minCharsErrorMsg(NewBookFields.title, "3") })
-      .max(100, { message: maxCharsErrorMsg(NewBookFields.title, "100") }),
-    description: z
-      .string()
-      .min(10, { message: minCharsErrorMsg(NewBookFields.description, "10") })
-      .max(400, {
-        message: maxCharsErrorMsg(NewBookFields.description, "400"),
-      }),
-    authorName: z
-      .string()
-      .min(5, { message: minCharsErrorMsg(NewBookFields.authorName, "5") })
-      .max(50, { message: maxCharsErrorMsg(NewBookFields.authorName, "50") }),
-    publicationDate: z.string().date(),
-    price: z.coerce.number().gt(0),
-    genre: z.enum(genres),
-  });
+  const dataToParse: Record<string, string> = Array.from(
+    formData.entries()
+  ).reduce((acc: Record<string, string>, [key, value]) => {
+    console.log(key, value);
+    acc[key] = value.toString();
+    return acc;
+  }, {});
 
   const parse = schema.safeParse({
-    title: formData.get(NewBookFields.title),
-    description: formData.get(NewBookFields.description),
-    authorName: formData.get(NewBookFields.authorName),
-    publicationDate: formData.get(NewBookFields.publicationDate),
-    price: formData.get(NewBookFields.price),
-    genre: formData.get(NewBookFields.genre),
+    ...dataToParse,
   });
 
   if (!parse.success) {
@@ -72,7 +44,7 @@ export async function createBook(
     });
 
     revalidatePath(`/books/${data.genre}`);
-    return { message: `Added Book ${data.title}` };
+    return { message: `${BookAppendedMsg} ${data.title}` };
   } catch (e) {
     return { message: "Failed to create Book" };
   }
@@ -92,7 +64,7 @@ export async function deleteBook(
     id: formData.get("id"),
     genre: formData.get("genre"),
   });
-  debugger;
+
   try {
     const response = await fetch(
       `http://localhost:5000/books/${data.genre}/${data.id}`,
@@ -109,8 +81,8 @@ export async function deleteBook(
     }
 
     revalidatePath(`/books/${data.genre}`);
-    console.log("Book removed successfully");
-    return { message: "Deleted successfully" };
+    console.log(BookRemovedMsg);
+    return { message: BookRemovedMsg };
   } catch (e) {
     return { message: "Failed to delete Book" };
   }
