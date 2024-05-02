@@ -122,9 +122,7 @@ const CreateForm: React.FC<CreateFromProps> = ({ genres }) => {
       </FormFieldWrapper>
 
       <FormSubmitButton txt="Add a book" />
-      <p aria-live="polite" className="sr-only" role="status">
-        {state?.message}
-      </p>
+      <p className="text-red-500 mt-4 font-bold">{state?.message}</p>
     </form>
   );
 };

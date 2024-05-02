@@ -37,11 +37,17 @@ export async function createBook(
   const data = parse.data;
 
   try {
-    await fetch(`http://localhost:5000/books/${data.genre}`, {
+    const response = await fetch(`http://localhost:5000/books/${data.genre}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
+
+    const parsed = await response.json();
+    if (!response.ok) {
+      console.error("Failed to create: ", parsed.message);
+      return { message: parsed.message };
+    }
 
     revalidatePath(`/books/${data.genre}`);
     return { message: `${BookAppendedMsg} ${data.title}` };
