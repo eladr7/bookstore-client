@@ -1,6 +1,6 @@
 "use client";
 
-import { createBook } from "@/app/actions";
+import { createBook, createBookMutation } from "@/app/actions";
 import FormFieldWrapper from "@/app/components/FormFieldWrapper";
 import { FormSubmitButton } from "@/app/components/FormSubmitButton";
 import { BookAppendedMsg, NewBookFields } from "@/app/lib/definitions";
@@ -14,6 +14,7 @@ import React, { useRef, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { useMutation } from "react-query";
 
 const FormInputFieldsMap = {
   title: "text",
@@ -30,6 +31,16 @@ const CreateForm: React.FC<CreateFromProps> = ({ genres }) => {
   const router = useRouter();
   const [state, formAction] = useFormState(createBook, {
     message: "",
+  });
+
+  const { status, error, mutate, isLoading } = useMutation(createBookMutation, {
+    onSuccess: () => {
+      // Optional: Handle success case
+    },
+    onError: (error: Error) => {
+      // Optional: Handle error case
+      console.error(error.message);
+    },
   });
 
   const {
@@ -49,12 +60,22 @@ const CreateForm: React.FC<CreateFromProps> = ({ genres }) => {
   return (
     <form
       action={formAction}
-      onSubmit={(evt) => {
+      onSubmit={async (evt) => {
         evt.preventDefault();
 
-        handleSubmit(() => {
-          formAction(new FormData(formRef.current!));
-        })(evt);
+        const formData = formRef.current?.value;
+        debugger;
+        // Check if the formData includes the genre, if not, set the default genre
+        if (formData && !formData.genre) {
+          // formData.set("genre", genre);
+          formData.genre = genre;
+        }
+        mutate(formData);
+        // mutate(formRef.current?.value);
+
+        // handleSubmit(() => {
+        //   formAction(new FormData(formRef.current!));
+        // })(evt);
       }}
       ref={formRef}
       className="create-form w-1/2"
@@ -102,9 +123,15 @@ const CreateForm: React.FC<CreateFromProps> = ({ genres }) => {
       </FormFieldWrapper>
 
       <FormSubmitButton txt="Add a book" />
+
       {state?.message && (
         <p className="text-red-500 mt-4 font-bold">{state?.message}</p>
       )}
+      {status && <p className="text-red-500 mt-4 font-bold">{status}</p>}
+      {error?.message && (
+        <p className="text-red-500 mt-4 font-bold">{error.message}</p>
+      )}
+      {isLoading && <p className="text-red-500 mt-4 font-bold">...Loading!!</p>}
     </form>
   );
 };

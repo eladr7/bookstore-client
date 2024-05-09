@@ -4,6 +4,7 @@ import "./globals.css";
 
 // Components
 import { Navbar } from "./components/Navbar";
+import { ReactQueryProvider } from "./components/ReactQueryProvider";
 
 const rubik = Rubik({ subsets: ["latin"] });
 
@@ -21,7 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={rubik.className}>
         <Navbar />
-        {children}
+        <ReactQueryProvider>{children}</ReactQueryProvider>
       </body>
     </html>
   );

@@ -7,6 +7,23 @@ import { fromZodError } from "zod-validation-error";
 import { createBookSchema, getGenresFromAPI } from "./lib/helpers";
 import { BookAppendedMsg, BookRemovedMsg } from "./lib/definitions";
 
+export const createBookMutation = async (data: FormData) => {
+  const response = await fetch(
+    `http://localhost:5000/books/${data.get("genre")}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  return response.json();
+};
+
 export async function createBook(
   prevState: {
     message: string;
@@ -37,17 +54,17 @@ export async function createBook(
   const data = parse.data;
 
   try {
-    const response = await fetch(`http://localhost:5000/books/${data.genre}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
+    // const response = await fetch(`http://localhost:5000/books/${data.genre}`, {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(data),
+    // });
 
-    const parsed = await response.json();
-    if (!response.ok) {
-      console.error("Failed to create: ", parsed.message);
-      return { message: parsed.message };
-    }
+    // const parsed = await response.json();
+    // if (!response.ok) {
+    //   console.error("Failed to create: ", parsed.message);
+    //   return { message: parsed.message };
+    // }
 
     revalidatePath(`/books/${data.genre}`);
     return { message: `${BookAppendedMsg} ${data.title}` };

@@ -26,3 +26,24 @@ export default async function Home() {
     </main>
   );
 }
+
+// npm i zod @hookform/resolvers
+// npm i react-hook-form
+// npm i zod-validation-error
+// npm i @prisma/client
+// npm install --save-dev ts-node typescript
+// sudo npm i -g @nestjs/cli@latest
+// npm i --save class-validator class-transformer
+// npm i --save-dev prisma typescript ts-node nodemon @types/node
+
+// TODO:
+// tRPC + useQuery for delete and create book!
+// add concurrently:
+// https://youtu.be/Lam0cYOEst8?si=CgFSkm1odArg1Bb0&t=56
+// fix the loading on the submit button
+// remove all inline css and move css to classes
+// description  String @db.VarChar(400)
+// change id to Int increment - i think.
+// chhange all interface to type
+// Add logs!
+// convert grid to tailwind
